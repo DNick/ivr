@@ -2,3 +2,4 @@ pyTelegramBotAPI~=4.12.0
 python-dotenv~=0.21.1
 telebot~=0.0.4
 peewee~=3.16.2
+telegraph~=2.2.0
