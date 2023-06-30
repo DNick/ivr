@@ -1,6 +1,5 @@
 from datetime import datetime
 
-import botocore.session
 from telebot.types import Message
 
 from tables import *

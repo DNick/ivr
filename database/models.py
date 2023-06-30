@@ -22,17 +22,18 @@ class BaseModel(Model):
 class Users(BaseModel):
     chat_id = TextField()
     access_courses_token = TextField()
+    auth_url = TextField()
 
 
 class Course(BaseModel):
-    user_id = ForeignKeyField(Users, backref='users')
+    user_id = ForeignKeyField(Users)
     title = TextField()
     description = TextField()
-
+    price = TextField()
 
 
 class Lesson(BaseModel):
-    course_id = ForeignKeyField(Course, backref='course')
+    course_id = ForeignKeyField(Course)
     url = TextField()
 
 
