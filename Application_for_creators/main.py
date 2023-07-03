@@ -4,10 +4,10 @@ from telebot.custom_filters import StateFilter
 from telebot.types import Message
 from telebot.handler_backends import State, StatesGroup
 
-from Application_for_creators.utils import is_non_negative_digit
+from Application_for_creators.utils import *
 from tables import *
 from config import bot
-
+from edit_course import *
 
 class MyStates(StatesGroup):
     enter_title = State()
@@ -17,10 +17,12 @@ class MyStates(StatesGroup):
 
 @bot.message_handler(commands=['start'])
 def handle_start(msg):
-    telegraph = Telegraph()
-    response = telegraph.create_account(short_name='Teach&Learn course')
-    # Сделать может быть ввод номера карты пользователя
-    Users.create(chat_id=msg.chat.id, access_courses_token=response['access_token'], auth_url=response['auth_url'])
+    is_registered = Users.select().where(Users.chat_id == msg.chat.id)
+    if not is_registered:
+        telegraph = Telegraph()
+        response = telegraph.create_account(short_name='Teach&Learn course')
+        # Сделать может быть ввод номера карты пользователя
+        Users.create(chat_id=msg.chat.id, access_courses_token=response['access_token'], auth_url=response['auth_url'])
 
     bot.send_message(msg.chat.id, 'Привет! Я бот такой-то делаю то-то', reply_markup=start_table)
 
@@ -64,11 +66,12 @@ def enter_correct_price(msg):
         return
 
     with bot.retrieve_data(msg.from_user.id, msg.chat.id) as data:
-        Course.create(user_id=user_id,
-                      title=data['title'],
-                      description=data['description'],
-                      price=msg.text)
-    bot.send_message(msg.chat.id, 'Курс создан, теперь вы можете добавлять новые темы', )
+        new_course = Course.create(user_id=user_id,
+                                   title=data['title'],
+                                   description=data['description'],
+                                   price=msg.text)
+        set_state(msg.chat.id, f'course_{new_course.get_id()}')
+    bot.send_message(msg.chat.id, 'Курс создан, теперь вы можете добавлять новые темы', reply_markup=get_edit_course_table(msg.chat.id))
     bot.delete_state(msg.from_user.id, msg.chat.id)
 
 
@@ -86,11 +89,6 @@ def handle_show_my_courses(msg: Message):
 def handle_strange_msg(msg):
     bot.send_message(msg.chat.id, 'Я Вас не понимаю, лучше нажми на одну из кнопочек снизу')
 
-
-# @bot.message_handler(func=lambda msg: 'Назад' in msg.text or 'Выйти и не сохранить' in msg.text)
-# def answer(msg):
-#     if bot.get_state(msg.from_user.id) == 'back_main':
-#         bot.send_message(msg.chat.id, 'Вы в главном меню', reply_markup=start_table)
 
 if __name__ == "__main__":
     print(f"Start polling at {datetime.now()}")

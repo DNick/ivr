@@ -2,11 +2,20 @@ from telebot.types import InlineKeyboardMarkup, KeyboardButton, ReplyKeyboardMar
 # from config import db_query
 from telegraph import Telegraph
 from database.models import *
-from telebot.types import *
 
 
 def create_topic_btn(topic):
     return InlineKeyboardButton(topic, callback_data=f'topic_{topic}')
+
+
+def get_edit_course_table(chat_id):
+    auth_url = Users.get(Users.chat_id == chat_id).auth_url
+    edit_course_table = ReplyKeyboardMarkup(resize_keyboard=True)
+    btn1 = KeyboardButton('Изменить общие данные')
+    btn2 = KeyboardButton('Добавить тему', web_app=WebAppInfo(auth_url))
+    btn3 = KeyboardButton('Поменять темы местами')
+    edit_course_table.add(btn1, btn2, btn3)
+    return edit_course_table
 
 
 start_table = ReplyKeyboardMarkup(resize_keyboard=True)
@@ -31,10 +40,13 @@ back_table.add(btn_back)
 # btn1 = KeyboardButton('Отменить последнее действие')
 # btn2 = KeyboardButton('Выйти и не сохранить')
 # create_course_table.add(btn1, btn2)
-# edit_course_table = ReplyKeyboardMarkup(resize_keyboard=True)
-# btn1 = KeyboardButton('Изменить общие данные')
-# btn2 = KeyboardButton('')
 
 
 exit_and_not_save_table = ReplyKeyboardMarkup(resize_keyboard=True)
 exit_and_not_save_table.add(KeyboardButton('Выйти и не сохранить'))
+
+change_meta_data_table = InlineKeyboardMarkup()
+btn1 = InlineKeyboardButton('Название', callback_data='change_title')
+btn2 = InlineKeyboardButton('Описание', callback_data='change_description')
+btn3 = InlineKeyboardButton('Цена', callback_data='change_price')
+change_meta_data_table.add(btn1, btn2, btn3)

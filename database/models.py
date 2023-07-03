@@ -21,6 +21,7 @@ class BaseModel(Model):
 
 class Users(BaseModel):
     chat_id = TextField()
+    state = TextField(null=True)
     access_courses_token = TextField()
     auth_url = TextField()
 
