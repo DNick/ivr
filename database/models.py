@@ -21,7 +21,7 @@ class BaseModel(Model):
 
 class Users(BaseModel):
     chat_id = TextField()
-    state = TextField(null=True)
+    attrs = TextField(default='{}')
     access_courses_token = TextField()
     auth_url = TextField()
 
@@ -30,7 +30,11 @@ class Course(BaseModel):
     user_id = ForeignKeyField(Users)
     title = TextField()
     description = TextField()
-    price = TextField()
+    price = TextField(default=0)
+    likes_count = BigIntegerField(default=0)
+    likes_sum = BigIntegerField(default=0)
+    views = BigIntegerField(default=0)
+    have_logo = BooleanField(default=False)
 
 
 class Lesson(BaseModel):
@@ -40,3 +44,8 @@ class Lesson(BaseModel):
 
 class Topics(BaseModel):
     text = TextField()
+
+
+# class CourseTopic(BaseModel):
+#     course_id = ForeignKeyField(Course)
+#     topic_id = ForeignKeyField(Topics)

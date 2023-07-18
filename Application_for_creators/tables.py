@@ -27,7 +27,7 @@ btn_back = KeyboardButton('Назад')
 
 topics_poll = list(map(lambda x: x.text, Topics.select()))
 
-topics_table = InlineKeyboardMarkup(row_width=2).add(InlineKeyboardButton('Все', callback_data='topic_Все'))
+topics_table = InlineKeyboardMarkup(row_width=2)
 for i in range(1, len(topics_poll[1:]), 2):
     topics_table.row(create_topic_btn(topics_poll[i]), create_topic_btn(topics_poll[i + 1]))
 if len(topics_poll) % 2 == 0:
@@ -49,4 +49,11 @@ change_meta_data_table = InlineKeyboardMarkup()
 btn1 = InlineKeyboardButton('Название', callback_data='change_title')
 btn2 = InlineKeyboardButton('Описание', callback_data='change_description')
 btn3 = InlineKeyboardButton('Цена', callback_data='change_price')
-change_meta_data_table.add(btn1, btn2, btn3)
+btn4 = InlineKeyboardButton('Изображение', callback_data='change_logo')
+change_meta_data_table.add(btn1, btn2, btn3, btn4)
+
+
+yes_no_table = InlineKeyboardMarkup()
+btn1 = InlineKeyboardButton('Да', callback_data='yes_choice')
+btn2 = InlineKeyboardButton('Нет', callback_data='no_choice')
+yes_no_table.add(btn1, btn2)
