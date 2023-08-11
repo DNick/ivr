@@ -1,8 +1,3 @@
-from telebot.types import Message
-
-from Application_for_creators.utils import *
-from Application_for_creators.tables import *
-from Application_for_creators.config import bot
 from Application_for_creators.handlers.edit_course import *
 
 

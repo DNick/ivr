@@ -1,7 +1,6 @@
 import io
 from typing import Dict
 
-import boto3
 import requests
 from telebot import SimpleCustomFilter
 import json
@@ -22,6 +21,15 @@ class StateFilter(SimpleCustomFilter):
         if not hasattr(obj, 'chat'):
             obj = obj.message
         return get_user_attr(obj.chat.id, 'state')
+
+
+class EditingCourseFilter(SimpleCustomFilter):
+    key = 'is_edit_course'
+
+    def check(self, obj):
+        if not hasattr(obj, 'chat'):
+            obj = obj.message
+        return get_user_attr(obj.chat.id, 'current_course') != ''
 
 
 def is_non_negative_digit(text):
@@ -105,10 +113,10 @@ def save_course(msg, file_id=''):
         set_user_attr(msg.chat.id, 'current_course', int(new_course.get_id()))
         current_course_id = new_course.get_id()
         bot.send_message(msg.chat.id, 'Курс создан, теперь вы можете добавлять новые темы',
-                         reply_markup=get_edit_course_table(msg.chat.id))
+                         reply_markup=edit_course_table)
     else:
         bot.send_message(msg.chat.id, 'Фотография успешно изменена',
-                         reply_markup=get_edit_course_table(msg.chat.id))
+                         reply_markup=edit_course_table)
 
     delete_state(msg.chat.id)
 
