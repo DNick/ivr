@@ -34,13 +34,15 @@ def handle_change_meta_data_2(call: CallbackQuery):
 
 @bot.message_handler(func=lambda msg: msg.text == 'Уроки курса', is_edit_course=True)
 def handle_all_lessons(msg: Message):
-    order_of_lessons = Course.get_by_id(get_user_attr(msg.chat.id, 'current_course')).order_of_lessons
+    order_of_lessons = get_current_order_of_lessons(msg.chat.id)
     if order_of_lessons == '':
         bot.send_message(msg.chat.id, 'В курсе пока нет уроков, Вы можете их добавить нажав на кнопку под сообщением',
                          reply_markup=InlineKeyboardMarkup().add(add_lesson_btn))
     else:
+        markup = get_all_lessons_table(order_of_lessons)
+        set_user_attr(msg.chat.id, 'all_lessons_table', markup.to_json())
         bot.send_message(msg.chat.id, 'Нажав на урок, вы можете редактировать его содержание или переместить',
-                         reply_markup=get_all_lessons_table(order_of_lessons).add(add_lesson_btn))
+                         reply_markup=markup.add(add_lesson_btn))
 
 
 @bot.message_handler(func=lambda msg: msg.text == 'Добавить урок', is_edit_course=True)
@@ -71,7 +73,7 @@ def handle_edit_lesson(msg):
 
 @bot.callback_query_handler(func=lambda call: call.data.startswith('lesson'), is_edit_course=True)
 def handle_choose_lesson(call: CallbackQuery):
-    order_of_lessons = Course.get_by_id(get_user_attr(call.message.chat.id, 'current_course')).order_of_lessons
+    order_of_lessons = get_current_order_of_lessons(call.message.chat.id)
     lesson_index = int(call.data.split('_')[1])
     lesson_id = order_of_lessons.split()[lesson_index]
 
@@ -84,6 +86,46 @@ def handle_choose_lesson(call: CallbackQuery):
     bot.edit_message_reply_markup(call.message.chat.id,
                                   message_id=call.message.id,
                                   reply_markup=markup)
+
+
+@bot.callback_query_handler(func=lambda call: call.data.startswith('move'), is_edit_course=True)
+def handle_move_lesson_1(call: CallbackQuery):
+    lesson_index = int(call.data.split('_')[1])
+    set_user_attr(call.message.chat.id, 'move_lesson', lesson_index)
+    order_of_lessons = get_current_order_of_lessons(call.message.chat.id)
+
+    markup = get_moving_lesson_table(call.message.chat.id, order_of_lessons, lesson_index, 0)
+
+    bot.edit_message_reply_markup(call.message.chat.id,
+                                  message_id=call.message.id,
+                                  reply_markup=markup)
+
+@bot.callback_query_handler(func=lambda call: call.data.startswith('swap'), is_edit_course=True)
+def handle_move_lesson_2(call: CallbackQuery):
+    order = get_current_order_of_lessons(call.message.chat.id).split()
+    lesson_index = get_user_attr(call.message.chat.id, 'move_lesson')
+    if 'up' in call.data:
+        delta = -1
+    elif 'down' in call.data:
+        delta = 1
+
+    order[lesson_index + delta], order[lesson_index] = order[lesson_index], order[lesson_index + delta]
+    order = ' '.join(order)
+    Course.set_by_id(get_user_attr(call.message.chat.id, 'current_course'), {'order_of_lessons': order})
+
+    set_user_attr(call.message.chat.id, 'move_lesson', lesson_index + delta)
+    markup = get_moving_lesson_table(call.message.chat.id, order, lesson_index, delta)
+    bot.edit_message_reply_markup(call.message.chat.id,
+                                  message_id=call.message.id,
+                                  reply_markup=markup)
+
+@bot.callback_query_handler(func=lambda call: call.data == 'save_order', is_edit_course=True)
+def handle_save_order(call: CallbackQuery):
+    markup = InlineKeyboardMarkup().de_json(get_user_attr(call.message.chat.id, 'all_lessons_table'))
+    bot.edit_message_reply_markup(call.message.chat.id,
+                                  message_id=call.message.id,
+                                  reply_markup=markup.add(add_lesson_btn))
+
 
 # @bot.callback_query_handler(func=lambda call: 'save_lesson')
 # def handle_save_lesson(msg: Message):

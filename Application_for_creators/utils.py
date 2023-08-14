@@ -131,3 +131,7 @@ def save_course(msg, file_id=''):
 def get_image_from_s3(backet, path):
     obj = s3.get_object(Bucket=backet, Key=path)
     return Image.open(obj['Body'])
+
+
+def get_current_order_of_lessons(chat_id):
+    return Course.get_by_id(get_user_attr(chat_id, 'current_course')).order_of_lessons

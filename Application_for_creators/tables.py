@@ -1,5 +1,5 @@
 from telebot.types import InlineKeyboardMarkup, KeyboardButton, ReplyKeyboardMarkup, InlineKeyboardButton, WebAppInfo
-from utils import set_user_attr
+from utils import set_user_attr, get_user_attr
 from telegraph import Telegraph
 from database.models import *
 
@@ -44,6 +44,27 @@ def get_all_courses_table(courses):
 
 def get_edit_btn(url):
     return InlineKeyboardButton('Редактировать', web_app=WebAppInfo(url))
+
+
+def get_moving_lesson_table(chat_id, order_of_lessons, lesson_index, delta):
+    jsn = InlineKeyboardMarkup().de_json(get_user_attr(chat_id, 'all_lessons_table')).to_dict()
+    lesson_index += delta
+    jsn['inline_keyboard'][lesson_index - delta][0], jsn['inline_keyboard'][lesson_index][0] = \
+        jsn['inline_keyboard'][lesson_index][0], jsn['inline_keyboard'][lesson_index - delta][0]
+    moving_lesson_table = InlineKeyboardMarkup().de_json(jsn)
+    set_user_attr(chat_id, 'all_lessons_table', jsn)
+
+    up_btn = InlineKeyboardButton('⬆', callback_data='swap_up')
+    save_order_btn = InlineKeyboardButton('Сохранить', callback_data='save_order')
+    down_btn = InlineKeyboardButton('⬇', callback_data=f'swap_down')
+    if lesson_index == 0:
+        moving_lesson_table.row(empty_btn, save_order_btn, down_btn)
+    elif lesson_index == len(order_of_lessons.split()) - 1:
+        moving_lesson_table.row(up_btn, save_order_btn, empty_btn)
+    else:
+        moving_lesson_table.row(up_btn, save_order_btn, down_btn)
+
+    return moving_lesson_table
 
 
 btn_back = KeyboardButton('Назад')
@@ -93,3 +114,5 @@ yes_no_table = InlineKeyboardMarkup()
 btn1 = InlineKeyboardButton('Да', callback_data='yes_choice')
 btn2 = InlineKeyboardButton('Нет', callback_data='no_choice')
 yes_no_table.add(btn1, btn2)
+
+empty_btn = InlineKeyboardButton(text=' ', callback_data=' ')
