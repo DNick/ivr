@@ -57,7 +57,9 @@ def get_moving_lesson_table(chat_id, order_of_lessons, lesson_index, delta):
     up_btn = InlineKeyboardButton('⬆', callback_data='swap_up')
     save_order_btn = InlineKeyboardButton('Сохранить', callback_data='save_order')
     down_btn = InlineKeyboardButton('⬇', callback_data=f'swap_down')
-    if lesson_index == 0:
+    if len(order_of_lessons.split()) == 1:
+        moving_lesson_table.row(empty_btn, save_order_btn, empty_btn)
+    elif lesson_index == 0:
         moving_lesson_table.row(empty_btn, save_order_btn, down_btn)
     elif lesson_index == len(order_of_lessons.split()) - 1:
         moving_lesson_table.row(up_btn, save_order_btn, empty_btn)
@@ -65,6 +67,7 @@ def get_moving_lesson_table(chat_id, order_of_lessons, lesson_index, delta):
         moving_lesson_table.row(up_btn, save_order_btn, down_btn)
 
     return moving_lesson_table
+
 
 
 btn_back = KeyboardButton('Назад')
