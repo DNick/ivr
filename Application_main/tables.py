@@ -1,5 +1,7 @@
-from telebot.types import InlineKeyboardMarkup, KeyboardButton, ReplyKeyboardMarkup, InlineKeyboardButton
+import sys
 
+from telebot.types import InlineKeyboardMarkup, KeyboardButton, ReplyKeyboardMarkup, InlineKeyboardButton
+sys.path.append('../../')
 from database.models import Topics
 
 

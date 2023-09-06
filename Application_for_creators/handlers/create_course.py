@@ -1,5 +1,7 @@
-from Application_for_creators.handlers.edit_course import *
+import sys
 
+from Application_for_creators.handlers.edit_course import *
+sys.path.append('../../')
 
 @bot.message_handler(func=lambda msg: msg.text == 'Создать свой курс')
 def handle_create_course(msg: Message):

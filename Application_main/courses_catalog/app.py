@@ -20,5 +20,14 @@ def index():
         pass
 
 
+@app.route('/course/<int:course_id>/', methods=['GET', 'POST'])
+def course(course_id):
+    current_course = Course.get_by_id(course_id).__data__
+    if request.method == 'GET':
+        return render_template('course.html', course=current_course)
+
+
+
+
 if __name__ == '__main__':
     app.run()
