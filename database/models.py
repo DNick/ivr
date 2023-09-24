@@ -47,6 +47,12 @@ class Lesson(BaseModel):
 class Topics(BaseModel):
     text = TextField()
 
-# class CourseTopic(BaseModel):
-#     course_id = ForeignKeyField(Course)
-#     topic_id = ForeignKeyField(Topics)
+
+class UserCourse(BaseModel):  # Таблица записи на курс пользователем
+    user_id = ForeignKeyField(Users)
+    course_id = ForeignKeyField(Course)
+
+
+class CourseTopic(BaseModel):
+    course_id = ForeignKeyField(Course)
+    topic_id = ForeignKeyField(Topics)
