@@ -1,7 +1,10 @@
-from telebot.types import Message, CallbackQuery
+from telebot.types import Message, CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
+from telegraph import Telegraph
 
-from Application_for_creators.utils import *
-from database.models import Course
+from App_creators.tables import get_all_lessons_table, get_edit_btn, get_moving_lesson_table, add_lesson_btn, \
+    get_edit_lesson_table, change_meta_data_table
+from App_creators.utils import *
+from database.models import Course, Lesson
 
 
 @bot.message_handler(func=lambda msg: msg.text == 'Изменить общие данные', is_edit_course=True)

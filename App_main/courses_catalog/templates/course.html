@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>title</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <h1>{{ course.title }}</h1>
+    <p>{{ course.description }}
+    {{ course.price }}</p>
+    {{ course.order_of_lessons }}
+    <img src="{{ course.url }}">
+<script>
+        let tg = window.Telegram.WebApp;
+        tg.MainButton.show();
+        tg.MainButton.setText("Подключиться к этому курсу");
+        {#tg.BackButton.onClick(tg.openTelegramLink('https://62d6-79-139-249-255.ngrok-free.app'));#}
+        tg.MainButton.onClick(function () {
+            tg.MainButton.color = '#78d923';
+            tg.MainButton.setText("Вы подключены");
+            tg.sendData("{{ course.id }}");
+        });
+</script>
+</body>
+</html>

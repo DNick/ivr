@@ -3,6 +3,8 @@ import time
 
 from flask import Flask, render_template, request
 
+from App_main.utils import get_logo_url_from_course_id
+
 # os.system('flask run')
 sys.path.append('../../')
 from database.models import Topics, Course
@@ -23,6 +25,8 @@ def index():
 @app.route('/course/<int:course_id>/', methods=['GET', 'POST'])
 def course(course_id):
     current_course = Course.get_by_id(course_id).__data__
+    if current_course['have_logo']:
+        current_course['url'] = get_logo_url_from_course_id(course_id)
     if request.method == 'GET':
         return render_template('course.html', course=current_course)
 
@@ -30,4 +34,4 @@ def course(course_id):
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run('localhost', 8000)

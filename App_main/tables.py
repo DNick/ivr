@@ -1,12 +1,23 @@
 import sys
 
-from telebot.types import InlineKeyboardMarkup, KeyboardButton, ReplyKeyboardMarkup, InlineKeyboardButton
+from telebot.types import InlineKeyboardMarkup, KeyboardButton, ReplyKeyboardMarkup, InlineKeyboardButton, WebAppInfo
+
 sys.path.append('../../')
-from database.models import Topics
+from database.models import Topics, Course
 
 
 def create_topic_btn(topic):
     return InlineKeyboardButton(topic, callback_data=f'topic_{topic}')
+
+
+def get_all_taken_courses_table(courses):
+    all_courses_table = InlineKeyboardMarkup()
+    for course in courses:
+        title = Course.get_by_id(course.id).title
+        btn = InlineKeyboardButton(title, callback_data=f'taken_course_{course.id}')
+        all_courses_table.add(btn)
+
+    return all_courses_table
 
 
 btn_back = KeyboardButton('Назад')
@@ -15,10 +26,12 @@ topics_poll = list(map(lambda x: x.text, Topics.select()))
 print(topics_poll)
 
 start_table = ReplyKeyboardMarkup(resize_keyboard=True)
-btn1 = KeyboardButton('Найти подходящий курс')
-btn2 = KeyboardButton('Создать курс')
-btn3 = KeyboardButton('Оставить отзыв')
-start_table.add(btn1, btn2, btn3)
+btn1 = KeyboardButton('Найти подходящий курс', web_app=WebAppInfo('https://62d6-79-139-249-255.ngrok-free.app'))
+btn2 = KeyboardButton('Мои курсы')
+btn3 = KeyboardButton('Создать курс')
+btn4 = KeyboardButton('Оставить отзыв')
+
+start_table.add(btn1, btn2, btn3, btn4)
 
 topics_table = InlineKeyboardMarkup(row_width=2).add(InlineKeyboardButton('Все', callback_data='topic_Все'))
 for i in range(1, len(topics_poll[1:]), 2):

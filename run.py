@@ -1,2 +1,2 @@
 import os
-os.system("python Application_main/main.py & python Application_for_creators/main.py & python Application_main/courses_catalog/app.py")
+os.system("python App_main/main.py & python App_creators/main.py & python App_main/courses_catalog/app.py")

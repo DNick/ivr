@@ -5,8 +5,9 @@ import requests
 from telebot import SimpleCustomFilter
 import json
 
-from Application_for_creators.tables import *
-from config import bot, s3
+
+from App_creators.config import bot, s3
+import App_creators.tables as tables
 from database.models import Users, Course
 from PIL import Image
 from dotenv import dotenv_values
@@ -113,10 +114,10 @@ def save_course(msg, file_id=''):
         set_user_attr(msg.chat.id, 'current_course', int(new_course.get_id()))
         current_course_id = new_course.get_id()
         bot.send_message(msg.chat.id, 'Курс создан, теперь вы можете добавлять новые темы',
-                         reply_markup=edit_course_table)
+                         reply_markup=tables.edit_course_table)
     else:
         bot.send_message(msg.chat.id, 'Фотография успешно изменена',
-                         reply_markup=edit_course_table)
+                         reply_markup=tables.edit_course_table)
 
     delete_state(msg.chat.id)
 
@@ -135,3 +136,4 @@ def get_image_from_s3(backet, path):
 
 def get_current_order_of_lessons(chat_id):
     return Course.get_by_id(get_user_attr(chat_id, 'current_course')).order_of_lessons
+

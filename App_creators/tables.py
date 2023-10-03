@@ -1,5 +1,5 @@
 from telebot.types import InlineKeyboardMarkup, KeyboardButton, ReplyKeyboardMarkup, InlineKeyboardButton, WebAppInfo
-from utils import set_user_attr, get_user_attr
+from App_creators.utils import set_user_attr, get_user_attr
 from telegraph import Telegraph
 from database.models import *
 
@@ -22,21 +22,30 @@ def get_edit_lesson_table(url):
     return add_lesson_table
 
 
-def get_all_lessons_table(order_of_lessons):
+def get_all_lessons_table(order_of_lessons, for_creator=True):
     order_of_lessons = order_of_lessons.split()
     all_lessons_table = InlineKeyboardMarkup()
     telegraph = Telegraph()
     for i in range(len(order_of_lessons)):
-        path = Lesson.get_by_id(order_of_lessons[i]).url[len('https://telegra.ph/'):]
-        btn = InlineKeyboardButton(telegraph.get_page(path)['title'], callback_data=f'lesson_{i}')
+        domain = 'https://telegra.ph/'
+        path = Lesson.get_by_id(order_of_lessons[i]).url[len(domain):]
+        if for_creator:
+            btn = InlineKeyboardButton(telegraph.get_page(path)['title'], callback_data=f'lesson_{i}')
+        else:
+            btn = InlineKeyboardButton(telegraph.get_page(path)['title'], web_app=WebAppInfo(domain + path))
+
         all_lessons_table.add(btn)
 
     return all_lessons_table
 
 
-def get_all_courses_table(courses):
+def get_all_courses_table(courses, for_creator=True):
     all_courses_table = InlineKeyboardMarkup()
     for course in courses:
+        if for_creator:
+            callback = f'course_{course.id}'
+        else:
+            callback = f'taken_course_{course.id}'
         btn = InlineKeyboardButton(course.title, callback_data=f'course_{course.id}')
         all_courses_table.add(btn)
 

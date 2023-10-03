@@ -1,6 +1,7 @@
 from datetime import datetime
 
-from handlers.create_course import *
+from App_creators.handlers.create_course import *
+from App_creators.tables import get_auth_table, edit_course_table, get_all_courses_table
 
 
 @bot.message_handler(commands=['start'])
