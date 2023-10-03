@@ -22,7 +22,7 @@ class BaseModel(Model):
 class Users(BaseModel):
     chat_id = TextField()
     attrs = TextField(default='{}')
-    access_courses_token = TextField()
+    access_courses_token = TextField(default='')
 
 
 class Course(BaseModel):

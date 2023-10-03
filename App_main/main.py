@@ -13,6 +13,7 @@ from config import *
 @bot.message_handler(commands=['start'])
 def handle_start(msg):
     print(msg.chat.id)
+    Users.create(chat_id=msg.chat.id)
     bot.send_message(msg.chat.id, 'Привет! Я бот такой-то делаю то-то', reply_markup=start_table)
 
 
@@ -32,7 +33,6 @@ def handle_get_taken_courses(msg: Message):
     if not courses:
         bot.send_message(msg.chat.id, 'Вы пока не получили доступ ни к одному курсу.')
         return
-    print(courses[0].__data__)
     bot.send_message(msg.chat.id, 'Вот ваши курсы:', reply_markup=get_all_taken_courses_table(courses))
 
 
