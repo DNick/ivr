@@ -13,7 +13,7 @@ def create_topic_btn(topic):
 def get_all_taken_courses_table(courses):
     all_courses_table = InlineKeyboardMarkup()
     for course in courses:
-        title = Course.get_by_id(course.id).title
+        title = course.title
         btn = InlineKeyboardButton(title, callback_data=f'taken_course_{course.id}')
         all_courses_table.add(btn)
 
@@ -26,7 +26,7 @@ topics_poll = list(map(lambda x: x.text, Topics.select()))
 print(topics_poll)
 
 start_table = ReplyKeyboardMarkup(resize_keyboard=True)
-btn1 = KeyboardButton('Найти подходящий курс', web_app=WebAppInfo('https://62d6-79-139-249-255.ngrok-free.app'))
+btn1 = KeyboardButton('Найти подходящий курс', web_app=WebAppInfo('https://dc20-82-204-189-106.ngrok-free.app'))
 btn2 = KeyboardButton('Мои курсы')
 btn3 = KeyboardButton('Создать курс')
 btn4 = KeyboardButton('Оставить отзыв')

@@ -29,7 +29,8 @@ def handle_create(msg: Message):
 
 @bot.message_handler(func=lambda msg: msg.text == 'Мои курсы')
 def handle_get_taken_courses(msg: Message):
-    courses = UserCourse.select().join(Users).where(Users.chat_id == msg.chat.id)
+    course_ids = list(map(lambda x: x.course_id, UserCourse.select().join(Users).where(Users.chat_id == msg.chat.id)))
+    courses = Course.select().where(Course.id.in_(course_ids))
     if not courses:
         bot.send_message(msg.chat.id, 'Вы пока не получили доступ ни к одному курсу.')
         return
