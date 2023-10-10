@@ -123,7 +123,7 @@ def handle_move_lesson_2(call: CallbackQuery):
     order = ' '.join(order)
     Course.set_by_id(get_user_attr(call.message.chat.id, 'current_course'), {'order_of_lessons': order})
 
-    set_user_attr(call.message.chat.id, 'move_lesson', lesson_index + delta)
+    set_user_attr(call.message.chat.id, 'current_lesson', lesson_index + delta)
     markup = get_moving_lesson_table(call.message.chat.id, order, lesson_index, delta)
     bot.edit_message_reply_markup(call.message.chat.id,
                                   message_id=call.message.id,

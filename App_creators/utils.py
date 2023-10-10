@@ -78,7 +78,7 @@ def is_image_square(file_id):
 def crop_photo_to_square(file_id):
     image = get_image_from_file_id(file_id)
     delta = (image.width - image.height) // 2
-    if delta < 0:
+    if delta <= 0:
         cropped_image = image.crop((0, -delta, image.width, image.height + delta))
     elif delta > 0:
         cropped_image = image.crop((delta, 0, image.width - delta, image.height))
