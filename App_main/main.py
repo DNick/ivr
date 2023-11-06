@@ -220,6 +220,10 @@ def handle_pay_course(call: CallbackQuery):
 
 @bot.message_handler(func=lambda msg: True)
 def handle_strange_msg(msg):
+    """
+    Хэндлер обработки сообщения, которое бот не понимает
+    :param msg: Входящее сообщение
+    """
     bot.send_message(msg.chat.id, 'Я Вас не понимаю, лучше нажмите на одну из кнопочек снизу')
 
 
