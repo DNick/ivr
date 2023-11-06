@@ -5,11 +5,12 @@ env = dotenv_values()
 
 try:
     db = PostgresqlDatabase(
+        host=env['DB_HOST'],
         database=env['DB_NAME'],
         user=env['DB_USER'],
-        password=env['DB_PASSWORD'],
-        host=env['DB_HOST'],
+        password=env['DB_PASSWORD']
     )
+
 except Exception as exc:
     print(f'Не удалось подключиться к БД сервиса: {exc}')
 
@@ -19,10 +20,15 @@ class BaseModel(Model):
         database = db
 
 
+class Topics(BaseModel):
+    text = TextField()
+
+
 class Users(BaseModel):
     chat_id = TextField()
     attrs = TextField(default='{}')
     access_courses_token = TextField(default='')
+    bank_card = TextField(null=True)
 
 
 class Course(BaseModel):
@@ -30,11 +36,14 @@ class Course(BaseModel):
     title = TextField()
     description = TextField()
     price = TextField(default=0)
-    likes_count = BigIntegerField(default=0)
-    likes_sum = BigIntegerField(default=0)
+    rate_count = BigIntegerField(default=0)
+    rate_sum = BigIntegerField(default=0)
     views = BigIntegerField(default=0)
     have_logo = BooleanField(default=False)
     order_of_lessons = TextField(default='')
+    publication_date = IntegerField(null=True)
+    chat_url = TextField(default='')
+    topic_id = ForeignKeyField(Topics, null=True)
 
 
 class Lesson(BaseModel):
@@ -44,15 +53,6 @@ class Lesson(BaseModel):
     views = TextField(default=0)
 
 
-class Topics(BaseModel):
-    text = TextField()
-
-
 class UserCourse(BaseModel):  # Таблица записи на курс пользователем
     user_id = ForeignKeyField(Users)
     course_id = ForeignKeyField(Course)
-
-
-class CourseTopic(BaseModel):
-    course_id = ForeignKeyField(Course)
-    topic_id = ForeignKeyField(Topics)

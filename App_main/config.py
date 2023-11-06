@@ -1,4 +1,3 @@
-import boto3
 from telebot import TeleBot
 from dotenv import dotenv_values
 

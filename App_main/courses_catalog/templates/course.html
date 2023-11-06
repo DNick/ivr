@@ -1,26 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
-<body>
-    <h1>{{ course.title }}</h1>
-    <p>{{ course.description }}
-    {{ course.price }}</p>
-    {{ course.order_of_lessons }}
-    <img src="{{ course.url }}">
-<script>
+<body style="background: url('https://catherineasquithgallery.com/uploads/posts/2021-02/1614377814_11-p-fon-dlya-saita-besshovnii-svetlii-13.jpg');">
+        <button type="button" class="btn btn-light">  {# style="height: 40px; border-radius: 5px" #}
+            <a href="{{ index_page_url }}/" style="text-decoration: none; color: black; display: flex; overflow: visible;"> < Назад </a>
+        </button>
+    <hr>
+    <h1 style="text-align: center">{{ course.title }}</h1>
+    <hr>
+    {% if course.logo_url %}
+        <div style="text-align: center">
+            <img src="{{ course.logo_url }}" alt="лого нету" width="60%">
+        </div>
+    {% endif %}
+    <h3 style="text-align: center">{{ course.description }}</h3>
+    <h5 style="margin-left: 10px;">Уроки курса:</h5>
+    <ul>
+        {% for title in course.lessons_titles %}
+            <li style="margin-left: 10px;">{{ title }}</li>
+        {% endfor %}
+    </ul>
+    <script>
         let tg = window.Telegram.WebApp;
+        tg.MainButton.text = "Подключиться к курсу ({{ course.price }} ₽)";
         tg.MainButton.show();
-        tg.MainButton.setText("Подключиться к этому курсу");
-        {#tg.BackButton.onClick(tg.openTelegramLink('https://dc20-82-204-189-106.ngrok-free.app'));#}
-        tg.MainButton.onClick(function () {
-            tg.MainButton.color = '#78d923';
-            tg.MainButton.setText("Вы подключены");
-            tg.sendData("{{ course.id }}");
+        Telegram.WebApp.onEvent('mainButtonClicked', function(){
+	        tg.sendData("{{ course.id }}");
         });
-</script>
+    </script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+    crossorigin="anonymous"></script>
 </body>
-</html>
