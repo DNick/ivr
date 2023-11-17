@@ -65,4 +65,4 @@ def modify_course_fields(course):
 
 
 if __name__ == '__main__':
-    app.run('localhost', 8000)
+    app.run('0.0.0.0', 8000)
