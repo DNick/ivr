@@ -1,7 +1,5 @@
-import sys
 from datetime import datetime
 
-sys.path.append('../../../')
 from telebot.types import Message, CallbackQuery
 from yoomoney import Client, Quickpay
 

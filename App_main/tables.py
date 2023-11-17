@@ -3,7 +3,6 @@ import sys
 from dotenv import dotenv_values
 from telebot.types import InlineKeyboardMarkup, KeyboardButton, ReplyKeyboardMarkup, InlineKeyboardButton, WebAppInfo
 
-sys.path.append('../../')
 from database.models import Topics
 
 

@@ -2,9 +2,6 @@ from App_creators.handlers.edit_course import *
 from App_creators.tables import exit_and_not_save_table, start_table, yes_no_table, topics_table
 from database.models import Topics
 
-sys.path.append('../../')
-
-
 @bot.message_handler(func=lambda msg: msg.text == 'Создать свой курс')
 def handle_create_course(msg: Message):
     """

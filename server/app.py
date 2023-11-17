@@ -4,9 +4,6 @@ from dotenv import dotenv_values
 from flask import Flask, render_template, request
 
 from App_main.utils import get_logo_url_from_course_id, get_lessons_titles
-
-sys.path.append('../../')
-
 from database.models import Topics, Course
 
 app = Flask(__name__)
