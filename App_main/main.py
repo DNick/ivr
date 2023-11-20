@@ -1,8 +1,8 @@
 from datetime import datetime
-
+import sys
 from telebot.types import Message, CallbackQuery
 from yoomoney import Client, Quickpay
-
+sys.path.append('/root/ivr/')
 from App_creators.tables import get_all_lessons_table
 from App_creators.utils import set_user_attr, get_current_order_of_lessons, get_user_attr
 from database.models import Users, UserCourse, Course
