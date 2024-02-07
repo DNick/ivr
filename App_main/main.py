@@ -10,6 +10,7 @@ from tables import *
 from config import *
 
 
+
 @bot.message_handler(commands=['start'])
 def handle_start(msg):
     """
@@ -221,7 +222,7 @@ def handle_pay_course(call: CallbackQuery):
                 sum=operation.amount,
                 label=label
             )
-            bot.send_message(call.message.chat.id,
+            bot.send_message(values['MAINTAINER_CHAT_ID'],
                              'Пользователь оплатил курс, переведите деньги создателю этого курса по кнопке',
                              reply_markup=get_pay_to_creator_table(payment.base_url))
             break
