@@ -49,6 +49,17 @@ def get_pay_course_table(payment_url, price, label):
     return pay_course_table
 
 
+def get_pay_to_creator_table(payment_url):
+    """
+    :param payment_url: Ссылка на перевод
+    :return: Клавиатура перевода денег создателю курса
+    """
+    pay_to_creator_table = InlineKeyboardMarkup()
+    btn1 = InlineKeyboardButton(f'Перевести деньги', url=payment_url)
+    pay_to_creator_table.add(btn1)
+    return pay_to_creator_table
+
+
 btn_back = KeyboardButton('Назад')
 
 topics_poll = list(map(lambda x: x.text, Topics.select()))

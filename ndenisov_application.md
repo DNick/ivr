@@ -1,7 +1,7 @@
 # Денисов Николай - "Teach&Learn"
-# Группа: 10 - И - 5
 # Электронная почта: [nd.denisoff@gmail.com]
-# VK: [https://vk.com/nd.denisoff]
+# Бот расположен по ссылке: https://t.me/teach_and_learn_bot
+# Видео с презентацией работы продукта: https://www.youtube.com/watch?v=P3dQgQ8RphU
 
 **[ НАЗВАНИЕ ПРОЕКТА ]**
 

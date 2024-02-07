@@ -53,7 +53,7 @@ def handle_get_taken_courses(msg: Message):
 def handle_choose_course(call: CallbackQuery):
     """
     Хэндлер просмотра уроков курса
-    :param сall: Входящий callback запрос
+    :param call: Входящий callback запрос
     """
     course_id = int(call.data.split('_')[2])
     set_user_attr(call.message.chat.id, 'current_course_main', course_id)
@@ -89,7 +89,7 @@ def handle_rate_course_1(msg: Message):
 def handle_rate_course_2(call: CallbackQuery):
     """
     Хэндлер второго этапа оценивания курса
-    :param сall: Входящий callback запрос
+    :param call: Входящий callback запрос
     """
     set_user_attr(call.message.chat.id, 'current_course_main', int(call.data.split('_')[-1]))
     bot.send_message(call.message.chat.id, 'Поставьте оценку курсу от 1 до 10, где 1 - '
@@ -210,6 +210,20 @@ def handle_pay_course(call: CallbackQuery):
             UserCourse.create(user_id=user_id, course_id=course_id)
             bot.edit_message_text('Вы успешно записались на курс "' + title + '"', chat_id=call.message.chat.id,
                                   message_id=call.message.message_id, reply_markup=None)
+
+            # Теперь отправить запрос администратору на отправку денег создателю курса
+            user_card_number = Users.select().where(Users.chat_id == call.message.chat.id)[0].bank_card
+            payment = Quickpay(
+                receiver=user_card_number,
+                quickpay_form="button",
+                targets="Оплата курса",
+                paymentType="AC",
+                sum=operation.amount,
+                label=label
+            )
+            bot.send_message(call.message.chat.id,
+                             'Пользователь оплатил курс, переведите деньги создателю этого курса по кнопке',
+                             reply_markup=get_pay_to_creator_table(payment.base_url))
             break
     else:
         bot.send_message(call.message.chat.id,
