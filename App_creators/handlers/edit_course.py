@@ -4,7 +4,7 @@ from App_creators.tables import *
 from App_creators.utils import *
 from App_main.utils import standard_date_to_excel_date
 from database.models import Course, Lesson, Topics, UserCourse
-
+from datetime import datetime
 
 @bot.message_handler(func=lambda msg: msg.text == 'Изменить общие данные', is_edit_course=True)
 def handle_change_meta_data_1(msg: Message):

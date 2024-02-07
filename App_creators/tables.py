@@ -179,3 +179,5 @@ def update_access_tokens():
                          'Нажмите пожалуйста на кнопку, для проддержания активности Вашего аккаунта. После открытия страницы просто закройте её.',
                          reply_markup=get_auth_table(response['auth_url']))
 
+if __name__ == '__main__':
+    update_access_tokens()

@@ -11,7 +11,7 @@ values = dotenv_values()
 @app.route('/', methods=['GET', 'POST'])
 def index():
     topics = list(map(lambda x: x.__data__, Topics.select()))
-    courses = map(lambda x: x.__data__, Course.select().where(bool(Course.publication_date)))
+    courses = map(lambda x: x.__data__, Course.select().where(Course.publication_date != None))
     courses = list(map(lambda x: modify_course_fields(x), courses))
 
     if request.method == 'POST':

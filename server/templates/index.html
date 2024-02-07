@@ -85,6 +85,8 @@
     <h3 class="text-center">Пока ни один курс не создан. Приходите позже</h3>
 {% endif %}
 <script>
+    let tg = window.Telegram.WebApp;
+    tg.MainButton.hide();
     function tick_all(count_topics) {
         for (topic_id of Array(count_topics).keys()) {
             document.getElementById('topic_' + (topic_id + 1).toString()).checked = document.getElementById('topic_0').checked;
