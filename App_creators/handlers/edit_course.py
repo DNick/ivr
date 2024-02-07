@@ -122,7 +122,7 @@ def handle_publish_course(msg: Message):
     """
     course = Course.get_by_id(get_user_attr(msg.chat.id, 'current_course'))
     user = Users.get_by_id(course.user_id)
-    if not user.bank_card and course.price != 0:
+    if not user.bank_card and course.price != '0':
         bot.send_message(msg.chat.id, 'Так как вы сделали курс платным, то Вам нужно:'
                                       '\n1. Зайти на сайт https://yoomoney.ru/'
                                       '\n2. Зарегистрироваться там'
